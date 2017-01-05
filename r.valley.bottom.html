@@ -1,0 +1,58 @@
+<h2>DESCRIPTION</h2>
+
+<p>
+<em>r.valley.bottom</em> calculates a Multi-resolution Valley Bottom 
+Flatness (MrVBF) index. The user must specify the input <b>elevation 
+raster</b> map. 
+</p>
+
+<p>
+Default moving window is cells in 8 directions. With the <b>-s</b> flag 
+a square moving window is used in calculations.
+</p>
+
+<h2>EXAMPLE</h2>
+
+<div class="code">
+ <pre>
+  # align region to DEM and habitat vector
+  g.region -a raster=DEM align=DEM
+
+  # run <em>r.valley.bottom</em>
+  r.r.valley.bottom elevation=DEM
+ </pre>
+</div>
+
+<h2>NOTES</h2>
+
+experimental
+
+<h2>TODO</h2>
+
+<p>
+Design the script independent of input elevation raster resolution. At 
+the moment the input elevation raster map must have a resolution of 25m 
+x 25m. Additionally the search window of the elevation percentile may be 
+adapted.
+</p>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</em>
+
+<h2>REFERENCES</h2>
+
+J.C. Gallant & T.I. Dowling 2003.
+A multiresolution index of valley bottom flatness for mapping depositional areas.
+Water Resources Research, Vol. 39, No. 12, 1347. doi:10.1029/2002WR001426
+
+<h2>AUTHOR</h2>
+
+Helmut Kudrnovsky
+
+<p>
+<i>Last changed: $Date: 2015-01-03 23:50:11 +0100 (Sa., 03 Jän 2015) $</i>
+</p>
