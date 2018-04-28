@@ -1,58 +1,71 @@
-# r.valley.bottom
-r.valley.bottom calculates a Multi-resolution Valley Bottom Flatness (MrVBF) index.
+<h2>DESCRIPTION</h2>
 
-NAME
-r.valley.bottom - Calculation of Multi-resolution Valley Bottom Flatness (MrVBF) index
+<em>r.valley.bottom</em> calculates the Multi-resolution Valley Bottom Flatness (MRVBF) index (Gallant and Dowling, 2003). The MRVBF index assesses the flatness and lowness of terrain over multiple scales and DEM resolutions in order to identify valley bottoms, which represent areas that are flat across multiple scales, and remain low relative to the surrounding relief at coarser scales. The algorithm uses a sigmoid/logistic transform to rescale terrain slope angles and elevation percentile into a 0 to 1 range, and then combines these results across multiple levels of DEM smoothing and coarser grid resolutions. Although the resulting index represents a continuous value, values < 0.5 do not generally represent valley bottoms, values from 0.5 to 1.5 represent the steepest resolvable valley bottoms, and flatter/larger valley bottoms are represented by values > 1.5.
 
-KEYWORDS
-raster, terrain
+<h2>NOTES</h2>
 
-SYNOPSIS
-r.valley.bottom
-r.valley.bottom --help
-r.valley.bottom [-s] elevation=name [--help] [--verbose] [--quiet] [--ui]
-Flags:
+The user must specify the input <b>elevation</b> raster map as a required input. The output is given by the <b>mrvbf</b> argument. Optionally, the complementary Multiresolution Index of Ridge Top Flatness can be calculated by specifying the <b>mrrtf</b> argument. In addition, there are several parameters than can be used to change the behaviour of the argument, although note that in this case the results and their interpretation will differ from what was envisaged in the original paper. However, in practice, this is often required especially for high-resolution DEMs. The arguments are:
 
--s
-    Use square moving window instead of moving window in 8 directions
---help
-    Print usage summary
---verbose
-    Verbose module output
---quiet
-    Quiet module output
---ui
-    Force launching GUI dialog
+<p></p>
+<li><em>t_slope</em> represents the initial threshold (t) for slope angle (in percentage). This specifies the slope angle that corresponds to a (logit) rescaled flatness value of 0.5. This means that slope angles lower than t_slope will be considered as flat areas, and slope angles higher than t_slope will be represented as non-flat areas. t_slope should be set based on the resolution of the input elevation dataset, and the algorithm was designed using with a 25 m DEM having a t_slope value of 16. Otherwise the t_slope value should by halved for every resolution step (a step consisting of a 3 x coarsening of resolution) above a 25 m resolution. For example, a 75 m DEM (3 x 25 m, 1 step) should have a t_slope value of 8, and a 250 m DEM (~2 resolution steps) should have a t_slope value of 4.</li>
 
-Parameters:
+<li><em>p_slope</em> represents the shape parameter (p) for the sigmoid transformation. It defines the slope of the sigmoid function, i.e. how quickly changes in slope angle scale to being flat vs. non-flat areas. High p_slope values will cause a slow, smooth transition from flat areas to steep areas. Low p_slope values will result in much more rapid transitions that highlight more local vs. regional relief.</li>
 
-elevation=name [required]
-    Name of elevation raster map
+<li><em>t_pctl_v</em> represents the threshold for transformation of elevation percentile to evaluate lowness. This represents the threshold value for elevation percentile by which values less than this value will represent low areas. Elevation percentile represents the ratio of pixels of lower elevation relative to the total number of pixels in a moving-window neighborhood. Similarly <em>t_pctl_r</em> is the equivalent 'upness' threshold for the MRRTF index.</li>
 
-DESCRIPTION
-r.valley.bottom calculates a Multi-resolution Valley Bottom Flatness (MrVBF) index. The user must specify the input elevation raster map.
+<li><em>p_pctl</em> represents the shape parameter (p) for the transformation of the elevation percentile. It defines the slope of the sigmoid function and governs how quickly transitions occur from low areas to upland areas.</li>
 
-Default moving window is cells in 8 directions. With the -s flag a square moving window is used in calculations.
+<li><em>t_vf</em> and <em>t_rf</em> represent the thresholds for identifying valley bottoms (or ridge tops). Larger values indicate increasing valley bottom characteristics, with values less than 0.5 considered not to be in valley bottoms.</li>
 
-EXAMPLE
+<p>The calculation of elevation percentile by default is performed using a circular window. With the <b>-s</b> flag a square moving window is used in calculations.</p>
 
-  # align region to DEM and habitat vector
-  g.region -a raster=DEM align=DEM
+<p>In practice, the user does not usually need to alter the threshold-related parameters other than t_slope. However, changing the shape parameters can be useful for to emphasize more local vs. more regional variations in relief. The number of generalization steps can also be adjusted by the <em>levels</em> argument. However usually a setting of 3 or 4 provides the best results.</p>
 
-  # run r.valley.bottom
-  r.r.valley.bottom elevation=DEM
+<h2>EXAMPLE</h2>
 
-NOTES
-experimental
+<p>Here we are going to use the GRASS GIS sample North Carolina data set as a basis to calculate the MRVBF index.</p>
 
-TODO
-Design the script independent of input elevation raster resolution. At the moment the input elevation raster map must have a resolution of 25m x 25m. Additionally the search window of the elevation percentile may be adapted.
+<div class="code">
+ <pre>
+  # align region to DEM
+  g.region -a raster=el_D782_6m@PERMANENT
+  
+  # calculate a shaded relief image
+  r.relief input=el_D782_6m@PERMANENT output=hs_D782_6m altitude=45 azimuth=315 zscale=4 scale=1                      
 
-SEE ALSO
-r.mapcalc, r.slope.aspect
+  # run <em>r.valley.bottom</em>
+  r.valley.bottom elevation=el_D782_6m@PERMANENT mrvbf=mrvbf_el_D782_6m t_slope=40
+  
+  # set colors
+  r.colors map=mrvbf_el_D782_6m color=bcyr -e
+  
+  # display
+  d.rast map=mrvbf_el_D782_6m
+ </pre>
+</div>
 
-REFERENCES
-J.C. Gallant & T.I. Dowling 2003. A multiresolution index of valley bottom flatness for mapping depositional areas. Water Resources Research, Vol. 39, No. 12, 1347. doi:10.1029/2002WR001426
+<center>
+<img src="mrvbf.png" alt="Multiresolution Index of Valley Bottom Flatness">
+</center>
 
-AUTHOR
-Helmut Kudrnovsky
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</em>
+
+<h2>REFERENCES</h2>
+
+J.C. Gallant & T.I. Dowling 2003.
+A multiresolution index of valley bottom flatness for mapping depositional areas.
+Water Resources Research, Vol. 39, No. 12, 1347. doi:10.1029/2002WR001426
+
+<h2>AUTHOR</h2>
+
+Helmut Kudrnovsky & Steven Pawley
+
+<p>
+<i>Last changed: $Date: 2015-01-03 23:50:11 +0100 (Sa., 03 Jän 2015) $</i>
+</p>
