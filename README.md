@@ -25,8 +25,7 @@ The user must specify the input <b>elevation</b> raster map as a required input.
 
 <p>Here we are going to use the GRASS GIS sample North Carolina data set as a basis to calculate the MRVBF index.</p>
 
-<div class="code">
- <pre>
+```
   # align region to DEM
   g.region -a raster=el_D782_6m@PERMANENT
   
@@ -41,13 +40,11 @@ The user must specify the input <b>elevation</b> raster map as a required input.
   
   # display
   d.rast map=mrvbf_el_D782_6m
- </pre>
-</div>
+```
 
 <center>
 <img src="mrvbf.png" alt="Multiresolution Index of Valley Bottom Flatness">
 </center>
-
 
 <h2>SEE ALSO</h2>
 
@@ -67,5 +64,5 @@ Water Resources Research, Vol. 39, No. 12, 1347. doi:10.1029/2002WR001426
 Helmut Kudrnovsky & Steven Pawley
 
 <p>
-<i>Last changed: $Date: 2015-01-03 23:50:11 +0100 (Sa., 03 Jän 2015) $</i>
+<i>Last changed: $Date: 2018-04-27 23:37:11 +0100 (Fr., 27 Apr 2018) $</i>
 </p>
