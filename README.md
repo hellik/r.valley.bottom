@@ -27,19 +27,18 @@ The user must specify the input <b>elevation</b> raster map as a required input.
 
 ```
   # align region to DEM
-  g.region -a raster=el_D782_6m@PERMANENT
+  g.region -a raster=el_D782_6m
   
-  # calculate a shaded relief image
-  r.relief input=el_D782_6m@PERMANENT output=hs_D782_6m altitude=45 azimuth=315 zscale=4 scale=1                      
-
   # run <em>r.valley.bottom</em>
-  r.valley.bottom elevation=el_D782_6m@PERMANENT mrvbf=mrvbf_el_D782_6m t_slope=40
+  r.valley.bottom elevation=el_D782_6m mrvbf=mrvbf_el_D782_6m t_slope=40 levels=6 p_slope=3 p_pctl=2
   
   # set colors
-  r.colors map=mrvbf_el_D782_6m color=bcyr -e
+  r.colors map=mrvbf_el_D782_6m color=bcyr -i
   
-  # display
-  d.rast map=mrvbf_el_D782_6m
+  # display over a shaded relief map
+  r.relief input=el_D782_6m output=hs_D782_6m altitude=45 azimuth=315 zscale=4 scale=1
+  r.shade shade=hs_D782_6m color=mrvbf_el_D782_6m output=mrvbf_shade
+  d.rast map=mrvbf_shade
 ```
 
 <center>
