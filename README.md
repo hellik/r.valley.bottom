@@ -19,7 +19,7 @@ The user must specify the input <b>elevation</b> raster map as a required input.
 
 <p>The calculation of elevation percentile by default is performed using a circular window. With the <b>-s</b> flag a square moving window is used in calculations.</p>
 
-<p>In practice, the user does not usually need to alter the threshold-related parameters other than t_slope. However, changing the shape parameters can be useful for to emphasize more local vs. more regional variations in relief. The number of generalization steps can also be adjusted by the <em>levels</em> argument. However usually a setting of 3 or 4 provides the best results.</p>
+<p>In practice, the user does not usually need to alter the threshold-related parameters other than t_slope. However, changing the shape parameters can be useful for to emphasize more local vs. more regional variations in relief. The degree of generalization can also be adjusted by the <em>min_cells</em> argument. The default value of 1 is equivalent to generalizing the input <b>elevation</b> raster to 100 percent of its original cell size. To reduce processing time, or focus the results on more local-relief, try increasing the number of min_cells.</p>
 
 <h2>EXAMPLE</h2>
 
