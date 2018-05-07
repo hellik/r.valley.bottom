@@ -30,7 +30,7 @@ The user must specify the input <b>elevation</b> raster map as a required input.
   g.region -a raster=el_D782_6m
   
   # run <em>r.valley.bottom</em>
-  r.valley.bottom elevation=el_D782_6m mrvbf=mrvbf_el_D782_6m t_slope=40 levels=6 p_slope=3 p_pctl=2
+  r.valley.bottom elevation=el_D782_6m mrvbf=mrvbf_el_D782_6m t_slope=40 p_slope=3 p_pctl=2
   
   # set colors
   r.colors map=mrvbf_el_D782_6m color=bcyr -i
